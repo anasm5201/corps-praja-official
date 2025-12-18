@@ -75,7 +75,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- ROADMAP & PRICING (Simplified for Stability) --- */}
+      {/* --- PRICING & ROADMAP --- */}
       <section className="relative py-24 px-6 bg-black/50 border-t border-white/5">
         <div className="container mx-auto text-center">
              <h2 className="text-3xl font-extrabold text-white mb-10">SIAP BERGABUNG?</h2>
