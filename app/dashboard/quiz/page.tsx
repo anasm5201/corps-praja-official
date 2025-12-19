@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-// DATABASE SOAL SIMULASI
 const questions = [
   {
     id: 1,
@@ -37,19 +36,17 @@ export default function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(60); 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  // EFEK PENYIMPANAN DATA (AUTO SAVE)
+  // --- EFEK PENYIMPANAN DATA (AUTO SAVE SYSTEM) ---
   useEffect(() => {
     if (showResult) {
-      // 1. Ambil XP lama
+      // 1. Ambil data lama
       const currentXP = parseInt(localStorage.getItem('cadetXP') || '0');
-      // 2. Tambah XP baru
+      // 2. Hitung XP Baru (Skor x 10)
       const newXP = currentXP + (score * 10);
       
-      // 3. Simpan ke Memori Browser
+      // 3. SIMPAN KE MEMORI BROWSER
       localStorage.setItem('cadetXP', newXP.toString());
       localStorage.setItem('lastScore', score.toString());
-      
-      // 4. Update Status Misi
       localStorage.setItem('missionAlpha', 'DONE');
     }
   }, [showResult, score]);
@@ -68,7 +65,6 @@ export default function QuizPage() {
     if (selectedOption === questions[currentQ].answer) {
       setScore(s => s + 5); 
     }
-
     if (currentQ < questions.length - 1) {
       setCurrentQ(currentQ + 1);
       setSelectedOption(null);
@@ -78,6 +74,7 @@ export default function QuizPage() {
     }
   };
 
+  // TAMPILAN HASIL BARU (DENGAN IKON DISKET)
   if (showResult) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black p-4">
@@ -86,12 +83,12 @@ export default function QuizPage() {
           animate={{ scale: 1, opacity: 1 }}
           className="bg-void border border-white/10 p-8 rounded-2xl max-w-md w-full text-center shadow-[0_0_50px_rgba(214,0,28,0.2)]"
         >
-          {/* TANDA BAHWA INI KODE BARU: JUDULNYA 'DATA TERSIMPAN' */}
+          {/* IKON DISKET = TANDA BERHASIL UPDATE */}
           <div className="w-20 h-20 bg-laser/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
             <span className="text-4xl">💾</span>
           </div>
           <h2 className="text-3xl font-bold text-white mb-2">DATA TERSIMPAN!</h2>
-          <p className="text-gray-400 mb-6 font-mono text-sm">Skor anda telah diunggah ke Markas Pusat.</p>
+          <p className="text-gray-400 mb-6 font-mono text-sm">Hasil latihan telah direkam ke Command Center.</p>
           
           <div className="bg-black/50 p-6 rounded-xl border border-white/5 mb-8 grid grid-cols-2 gap-4">
             <div>
@@ -118,12 +115,12 @@ export default function QuizPage() {
     <div className="max-w-4xl mx-auto py-8 px-4 h-full flex flex-col justify-center min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-4">
-            <button onClick={() => router.back()} className="text-gray-500 hover:text-white text-sm font-mono">← BATAL</button>
+            <Link href="/dashboard" className="text-gray-500 hover:text-white text-sm font-mono">← BATAL</Link>
             <div className="px-3 py-1 rounded bg-laser/10 border border-laser text-laser text-xs font-bold tracking-wider">
                 SOAL {currentQ + 1} / {questions.length}
             </div>
         </div>
-        <div className={`font-mono text-xl font-bold ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-white'}`}>
+        <div className="font-mono text-xl font-bold text-white">
             00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
         </div>
       </div>
@@ -143,7 +140,7 @@ export default function QuizPage() {
                     <button
                         key={i}
                         onClick={() => setSelectedOption(i)}
-                        className={`w-full text-left p-4 rounded-xl border transition-all duration-200 flex items-center gap-4 group ${selectedOption === i ? 'bg-laser text-white border-laser' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                        className={`w-full text-left p-4 rounded-xl border transition-all duration-200 flex items-center gap-4 ${selectedOption === i ? 'bg-laser text-white border-laser' : 'bg-white/5 border-white/10'}`}
                     >
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border ${selectedOption === i ? 'bg-white text-laser border-white' : 'border-gray-600'}`}>{String.fromCharCode(65 + i)}</div>
                         <span className="text-lg">{opt}</span>
@@ -157,9 +154,9 @@ export default function QuizPage() {
         <button 
             onClick={handleNext}
             disabled={selectedOption === null}
-            className={`px-8 py-4 rounded font-bold tracking-widest transition-all ${selectedOption !== null ? 'bg-white text-black hover:scale-105' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}
+            className={`px-8 py-4 rounded font-bold tracking-widest transition-all ${selectedOption !== null ? 'bg-white text-black' : 'bg-gray-800 text-gray-500 cursor-not-allowed'}`}
         >
-            {currentQ === questions.length - 1 ? 'SELESAIKAN MISI' : 'LANJUT →'}
+            {currentQ === questions.length - 1 ? 'SELESAIKAN' : 'LANJUT →'}
         </button>
       </div>
     </div>
