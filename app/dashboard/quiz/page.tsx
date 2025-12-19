@@ -40,9 +40,9 @@ export default function QuizPage() {
   // EFEK PENYIMPANAN DATA (AUTO SAVE)
   useEffect(() => {
     if (showResult) {
-      // 1. Ambil XP lama (atau 0 jika belum ada)
+      // 1. Ambil XP lama
       const currentXP = parseInt(localStorage.getItem('cadetXP') || '0');
-      // 2. Tambah XP baru (Skor * 10)
+      // 2. Tambah XP baru
       const newXP = currentXP + (score * 10);
       
       // 3. Simpan ke Memori Browser
@@ -64,14 +64,9 @@ export default function QuizPage() {
     }
   }, [timeLeft, showResult]);
 
-  const handleAnswer = (index: number) => {
-    setSelectedOption(index);
-  };
-
   const handleNext = () => {
-    // Cek Jawaban
     if (selectedOption === questions[currentQ].answer) {
-      setScore(s => s + 5); // +5 Poin jika benar
+      setScore(s => s + 5); 
     }
 
     if (currentQ < questions.length - 1) {
@@ -91,6 +86,7 @@ export default function QuizPage() {
           animate={{ scale: 1, opacity: 1 }}
           className="bg-void border border-white/10 p-8 rounded-2xl max-w-md w-full text-center shadow-[0_0_50px_rgba(214,0,28,0.2)]"
         >
+          {/* TANDA BAHWA INI KODE BARU: JUDULNYA 'DATA TERSIMPAN' */}
           <div className="w-20 h-20 bg-laser/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
             <span className="text-4xl">💾</span>
           </div>
@@ -122,7 +118,7 @@ export default function QuizPage() {
     <div className="max-w-4xl mx-auto py-8 px-4 h-full flex flex-col justify-center min-h-screen">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-4">
-            <button onClick={() => router.back()} className="text-gray-500 hover:text-white text-sm font-mono">← BATALKAN MISI</button>
+            <button onClick={() => router.back()} className="text-gray-500 hover:text-white text-sm font-mono">← BATAL</button>
             <div className="px-3 py-1 rounded bg-laser/10 border border-laser text-laser text-xs font-bold tracking-wider">
                 SOAL {currentQ + 1} / {questions.length}
             </div>
